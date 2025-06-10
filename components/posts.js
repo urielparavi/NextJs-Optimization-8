@@ -1,6 +1,7 @@
 'use client';
 
 import { useOptimistic } from 'react';
+import Image from 'next/image';
 
 import { formatDate } from '@/lib/format';
 import LikeButton from './like-icon';
@@ -10,7 +11,11 @@ function Post({ post, action }) {
   return (
     <article className="post">
       <div className="post-image">
-        <img src={post.image} alt={post.title} />
+        {/*
+         Use 'fill' to make the image automatically stretch to fill the size of its parent container.
+         Requires the parent element to have position: relative and explicit width and height.
+     */}
+        <Image src={post.image} fill alt={post.title} />
       </div>
       <div className="post-content">
         <header>
