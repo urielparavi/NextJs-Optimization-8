@@ -13,6 +13,10 @@ import { togglePostLikeStatus } from '@/actions/posts';
  * Builds a Cloudinary URL with width and quality params (e.g. w_200, q_50)
  * so the image is served already optimized — smaller and faster to load.
  *
+ * The loader is passed as a prop to the <Image> component, and it helps
+ * manipulate the Cloudinary image URL to apply transformations such as resizing
+ * and adjusting quality, enabling optimized image delivery.
+ *
  * Example:
  * Original:   https://res.cloudinary.com/.../upload/v12345/folder/image.jpg
  * Transformed: https://res.cloudinary.com/.../upload/w_200,q_50/v12345/folder/image.jpg
