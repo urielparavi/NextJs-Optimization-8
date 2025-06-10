@@ -158,9 +158,13 @@ main {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
-.post img {
+.post-image {
   width: 8rem;
   height: 6rem;
+  position: relative;
+}
+
+.post img {
   object-fit: cover;
 }
 
