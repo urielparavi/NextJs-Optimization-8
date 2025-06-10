@@ -1,16 +1,69 @@
 'use client';
 
 import { useOptimistic } from 'react';
+import Image from 'next/image';
 
 import { formatDate } from '@/lib/format';
 import LikeButton from './like-icon';
 import { togglePostLikeStatus } from '@/actions/posts';
 
+/**
+ * Custom Cloudinary image loader for Next.js <Image> component.
+ *
+ * Builds a Cloudinary URL with width and quality params (e.g. w_200, q_50)
+ * so the image is served already optimized — smaller and faster to load.
+ *
+ * The loader is passed as a prop to the <Image> component, and it helps
+ * manipulate the Cloudinary image URL to apply transformations such as resizing
+ * and adjusting quality, enabling optimized image delivery.
+ *
+ * Example:
+ * Original:   https://res.cloudinary.com/.../upload/v12345/folder/image.jpg
+ * Transformed: https://res.cloudinary.com/.../upload/w_200,q_50/v12345/folder/image.jpg
+ *
+ * Usage:
+ * <Image loader={cloudinaryLoader} src="..." width={200} quality={50} ... />
+ *
+ * Props:
+ * - src:     Image path
+ * - width:   Desired width
+ * - quality: Desired quality (1–100)
+ */
+
+function imageLoader(config) {
+  // console.log(config);
+  // {
+  //   src: 'https://res.cloudinary.com/dlwm02l1u/image/upload/v1749298486/nextjs/pqanxkasnj5yaoutkf8h.jpg',
+  //   quality: undefined,
+  //   width: 3840
+  // }
+
+  const urlStart = config.src.split('upload/')[0]; // Output: https://res.cloudinary.com/dlwm02l1u/image/
+
+  const urlEnd = config.src.split('upload/')[1]; // Output: v1749298486/nextjs/pqanxkasnj5yaoutkf8h.jpg
+
+  const transformations = `w_200,q_${config.quality}`; // Output: w_200,q_50
+
+  return `${urlStart}upload/${transformations}/${urlEnd}`;
+  // https://res.cloudinary.com/dlwm02l1u/image/upload/w_200,q_50/v1749298486/nextjs/pqanxkasnj5yaoutkf8h.jpg
+}
+
 function Post({ post, action }) {
   return (
     <article className="post">
       <div className="post-image">
-        <img src={post.image} alt={post.title} />
+        {/*
+         Use 'fill' to make the image automatically stretch to fill the size of its parent container.
+         Requires the parent element to have position: relative and explicit width and height.
+     */}
+        <Image
+          loader={imageLoader}
+          src={post.image}
+          width={200}
+          height={120}
+          alt={post.title}
+          quality={50}
+        />
       </div>
       <div className="post-content">
         <header>
